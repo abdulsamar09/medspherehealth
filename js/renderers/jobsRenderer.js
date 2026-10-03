@@ -236,12 +236,13 @@ window.MedSphereJobs = {
     const j = allJobs.find(item => item.id === jobId) || allJobs[0];
 
     if (detailCol && j) {
-      detailCol.style.display = window.innerWidth <= 768 ? 'flex' : 'block';
+      detailCol.classList.add('is-open');
+      detailCol.style.display = window.innerWidth <= 1040 ? 'flex' : 'block';
       detailCol.innerHTML = this.renderDetailPanelHtml(j);
       const scrollBody = detailCol.querySelector('.jobs-detail-scroll-body');
       if (scrollBody) scrollBody.scrollTop = 0;
-      // On mobile: lock body scroll so the page behind doesn't scroll
-      if (window.innerWidth <= 768) {
+      // On mobile / tablet: lock body scroll so the page behind doesn't scroll
+      if (window.innerWidth <= 1040) {
         document.body.style.overflow = 'hidden';
       }
     }
@@ -257,14 +258,13 @@ window.MedSphereJobs = {
 
     const detailCol = document.getElementById('jobs-detail-panel');
     if (detailCol) {
+      detailCol.classList.remove('is-open');
       detailCol.style.display = 'none';
       detailCol.innerHTML = '';
     }
 
-    // Restore body scroll on mobile
-    if (window.innerWidth <= 768) {
-      document.body.style.overflow = '';
-    }
+    // Restore body scroll
+    document.body.style.overflow = '';
 
     const cards = document.querySelectorAll('.jobs-feed-card');
     cards.forEach(c => c.classList.remove('active'));
@@ -498,6 +498,9 @@ window.MedSphereJobs = {
             <div class="jobs-feed-card ${isActive ? 'active' : ''}" 
                  id="job-card-${j.id}" 
                  data-job-id="${j.id}" 
+                 role="button"
+                 tabindex="0"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); window.MedSphereJobs.selectJob('${j.id}');}"
                  onclick="window.MedSphereJobs.selectJob('${j.id}')">
               <div class="jobs-feed-card-header">
                 <div class="jobs-feed-avatar" style="background:${bg};">
@@ -531,9 +534,16 @@ window.MedSphereJobs = {
                 </div>
 
                 <div class="jobs-feed-actions" onclick="event.stopPropagation()">
-                  <button class="jobs-bookmark-btn ${isSaved ? 'saved' : ''}" 
+                  <button type="button" 
+                          class="btn-apply-card ${hasApplied ? 'applied' : ''}"
+                          title="${hasApplied ? 'Already Applied' : 'Apply for ' + j.title}"
+                          onclick="event.stopPropagation(); window.MedSphereJobs.handleApply('${j.id}')">
+                    ${hasApplied ? '<i class="fa-solid fa-check"></i> Applied' : '<i class="fa-solid fa-paper-plane"></i> Apply'}
+                  </button>
+                  <button type="button" 
+                          class="jobs-bookmark-btn ${isSaved ? 'saved' : ''}" 
                           title="${isSaved ? 'Remove Bookmark' : 'Save Job'}"
-                          onclick="window.MedSphereJobs.toggleSaveJob('${j.id}')">
+                          onclick="event.stopPropagation(); window.MedSphereJobs.toggleSaveJob('${j.id}')">
                     <i class="${isSaved ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'}"></i>
                   </button>
                 </div>
@@ -813,6 +823,9 @@ window.MedSphereJobs = {
                       <div class="jobs-feed-card ${isActive ? 'active' : ''}" 
                            id="job-card-${j.id}" 
                            data-job-id="${j.id}" 
+                           role="button"
+                           tabindex="0"
+                           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); window.MedSphereJobs.selectJob('${j.id}');}"
                            onclick="window.MedSphereJobs.selectJob('${j.id}')">
                         <div class="jobs-feed-card-header">
                           <div class="jobs-feed-avatar" style="background:${bg};">
@@ -846,9 +859,16 @@ window.MedSphereJobs = {
                           </div>
 
                           <div class="jobs-feed-actions" onclick="event.stopPropagation()">
-                            <button class="jobs-bookmark-btn ${isSaved ? 'saved' : ''}" 
+                            <button type="button" 
+                                    class="btn-apply-card ${hasApplied ? 'applied' : ''}"
+                                    title="${hasApplied ? 'Already Applied' : 'Apply for ' + j.title}"
+                                    onclick="event.stopPropagation(); window.MedSphereJobs.handleApply('${j.id}')">
+                              ${hasApplied ? '<i class="fa-solid fa-check"></i> Applied' : '<i class="fa-solid fa-paper-plane"></i> Apply'}
+                            </button>
+                            <button type="button" 
+                                    class="jobs-bookmark-btn ${isSaved ? 'saved' : ''}" 
                                     title="${isSaved ? 'Remove Bookmark' : 'Save Job'}"
-                                    onclick="window.MedSphereJobs.toggleSaveJob('${j.id}')">
+                                    onclick="event.stopPropagation(); window.MedSphereJobs.toggleSaveJob('${j.id}')">
                               <i class="${isSaved ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'}"></i>
                             </button>
                           </div>
@@ -863,7 +883,10 @@ window.MedSphereJobs = {
           </main>
 
           <!-- RIGHT DETAIL PANEL (MATCHING IMAGE 1) -->
-          <aside class="jobs-portal-detail-col" id="jobs-detail-panel" style="${this.state.isDetailOpen && selectedJob ? '' : 'display:none;'}">
+          <aside class="jobs-portal-detail-col ${this.state.isDetailOpen ? 'is-open' : ''}" 
+                 id="jobs-detail-panel" 
+                 onclick="if(event.target === this) window.MedSphereJobs.closeDetail()" 
+                 style="${this.state.isDetailOpen && selectedJob ? (window.innerWidth <= 1040 ? 'display:flex;' : 'display:block;') : 'display:none;'}">
             ${selectedJob ? this.renderDetailPanelHtml(selectedJob) : ''}
           </aside>
 
