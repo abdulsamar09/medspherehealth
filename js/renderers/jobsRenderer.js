@@ -226,30 +226,31 @@ window.MedSphereJobs = {
       }
     });
 
+    const allJobs = window.MEDSPHERE_DATA.jobs || [];
+    const j = allJobs.find(item => item.id === jobId) || allJobs[0];
+    if (!j) return;
+
+    // On mobile & tablet screens (<= 1040px): EXCLUSIVELY open modal-job-detail via MedSphereModals (single modal only)
+    if (window.innerWidth <= 1040) {
+      if (window.MedSphereModals) {
+        window.MedSphereModals.open('modal-job-detail', j);
+      }
+      return;
+    }
+
+    // On desktop screens (> 1040px): Open the 3rd column preview panel in grid
     const portalGrid = document.querySelector('.jobs-portal-grid');
     if (portalGrid) {
       portalGrid.classList.add('detail-panel-open');
     }
 
-    const allJobs = window.MEDSPHERE_DATA.jobs || [];
-    const j = allJobs.find(item => item.id === jobId) || allJobs[0];
-    if (!j) return;
-
-    // On mobile & tablet screens, immediately launch the full modal drawer for 100% reliable rendering
-    if (window.innerWidth <= 1040 && window.MedSphereModals) {
-      window.MedSphereModals.open('modal-job-detail', j);
-    }
-
     const detailCol = document.getElementById('jobs-detail-panel');
     if (detailCol) {
       detailCol.classList.add('is-open');
-      detailCol.style.display = window.innerWidth <= 1040 ? 'flex' : 'block';
+      detailCol.style.display = 'block';
       detailCol.innerHTML = this.renderDetailPanelHtml(j);
       const scrollBody = detailCol.querySelector('.jobs-detail-scroll-body');
       if (scrollBody) scrollBody.scrollTop = 0;
-      if (window.innerWidth <= 1040) {
-        document.body.style.overflow = 'hidden';
-      }
     }
   },
 
@@ -887,11 +888,11 @@ window.MedSphereJobs = {
 
           </main>
 
-          <!-- RIGHT DETAIL PANEL (MATCHING IMAGE 1) -->
+          <!-- RIGHT DETAIL PANEL (MATCHING IMAGE 1 - DESKTOP ONLY) -->
           <aside class="jobs-portal-detail-col ${this.state.isDetailOpen ? 'is-open' : ''}" 
                  id="jobs-detail-panel" 
                  onclick="if(event.target === this) window.MedSphereJobs.closeDetail()" 
-                 style="${this.state.isDetailOpen && selectedJob ? (window.innerWidth <= 1040 ? 'display:flex;' : 'display:block;') : 'display:none;'}">
+                 style="${this.state.isDetailOpen && selectedJob && window.innerWidth > 1040 ? 'display:block;' : 'display:none;'}">
             ${selectedJob ? this.renderDetailPanelHtml(selectedJob) : ''}
           </aside>
 
