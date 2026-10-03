@@ -231,17 +231,22 @@ window.MedSphereJobs = {
       portalGrid.classList.add('detail-panel-open');
     }
 
-    const detailCol = document.getElementById('jobs-detail-panel');
     const allJobs = window.MEDSPHERE_DATA.jobs || [];
     const j = allJobs.find(item => item.id === jobId) || allJobs[0];
+    if (!j) return;
 
-    if (detailCol && j) {
+    // On mobile & tablet screens, immediately launch the full modal drawer for 100% reliable rendering
+    if (window.innerWidth <= 1040 && window.MedSphereModals) {
+      window.MedSphereModals.open('modal-job-detail', j);
+    }
+
+    const detailCol = document.getElementById('jobs-detail-panel');
+    if (detailCol) {
       detailCol.classList.add('is-open');
       detailCol.style.display = window.innerWidth <= 1040 ? 'flex' : 'block';
       detailCol.innerHTML = this.renderDetailPanelHtml(j);
       const scrollBody = detailCol.querySelector('.jobs-detail-scroll-body');
       if (scrollBody) scrollBody.scrollTop = 0;
-      // On mobile / tablet: lock body scroll so the page behind doesn't scroll
       if (window.innerWidth <= 1040) {
         document.body.style.overflow = 'hidden';
       }

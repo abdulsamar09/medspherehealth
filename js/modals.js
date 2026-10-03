@@ -6,6 +6,13 @@ window.MedSphereModals = {
   open(modalId, contextData = {}) {
     this.close(); // Close any currently open modal
     
+    // For dynamic data-driven modals, remove existing DOM element to ensure fresh data rendering
+    const dynamicModals = ['modal-apply-job', 'modal-job-detail', 'modal-connect', 'modal-order-success', 'modal-cme-enroll'];
+    if (dynamicModals.includes(modalId)) {
+      const oldModal = document.getElementById(modalId);
+      if (oldModal) oldModal.remove();
+    }
+
     let modalEl = document.getElementById(modalId);
     if (!modalEl) {
       modalEl = this.buildDynamicModal(modalId, contextData);
@@ -413,6 +420,135 @@ window.MedSphereModals = {
                     onclick="MedSphereModals.submitJobApplication('${data.id}', '${data.title}', '${data.company}')">
               <i class="fa-solid fa-paper-plane" style="margin-right:6px;"></i> Apply on Employer Site
             </button>
+          </div>
+        </div>
+      `;
+    } else if (modalId === 'modal-job-detail') {
+      const store = window.MedSphereStore;
+      const isSaved = store ? store.isJobSaved(data.id) : false;
+      const hasApplied = store ? store.hasApplied(data.id) : false;
+      const comp = data.company || 'Healthcare Provider';
+      const parts = comp.replace(/[^a-zA-Z\s]/g, '').trim().split(/\s+/);
+      const monogram = parts.length >= 2 ? (parts[0][0] + parts[1][0]).toUpperCase() : (comp.slice(0, 1) || 'M').toUpperCase();
+      const bg = comp.toLowerCase().includes('mediclinic') ? '#dc2626' : (comp.toLowerCase().includes('luke') || comp.toLowerCase().includes('mayo') ? '#0066cc' : '#0284c7');
+      const locationLine = data.facility ? `${data.facility} · ${data.location}` : (data.location || '');
+
+      modalHtml = `
+        <div class="modal-dialog modal-dialog-lg" style="max-width:680px; width:100%; max-height:90vh; display:flex; flex-direction:column; padding:0; overflow:hidden; border-radius:18px;">
+          <!-- Header -->
+          <div style="padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; background:#ffffff;">
+            <div style="display:flex; align-items:flex-start; gap:12px;">
+              <div style="width:48px; height:48px; border-radius:10px; background:${bg}; color:#fff; font-weight:800; font-size:1.15rem; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${monogram}
+              </div>
+              <div>
+                <h3 style="font-size:1.2rem; font-weight:700; color:#0f172a; margin:0 0 4px 0; line-height:1.3;">${data.title}</h3>
+                <p style="font-size:0.875rem; color:#475569; margin:0;">
+                  <strong>${data.company}</strong> · <span>${locationLine}</span>
+                </p>
+              </div>
+            </div>
+            <button class="modal-close-btn" onclick="MedSphereModals.close()" style="background:#f1f5f9; border:none; border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <!-- Action CTA Bar -->
+          <div style="padding:0.85rem 1.5rem; background:#f8fafc; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; gap:10px;">
+            <button type="button" 
+                    class="btn btn-primary" 
+                    style="flex:1; padding:0.65rem 1.5rem; font-weight:700; font-size:0.95rem; border-radius:9999px; background:#0080ff; color:#fff; border:none; box-shadow:0 2px 8px rgba(0,128,255,0.25);"
+                    onclick="MedSphereModals.open('modal-apply-job', window.MEDSPHERE_DATA.jobs.find(j => j.id === '${data.id}') || {})">
+              ${hasApplied ? '<i class=\"fa-solid fa-circle-check\"></i> Applied on employer site' : '<i class=\"fa-solid fa-paper-plane\"></i> Apply on employer site'}
+            </button>
+            <button type="button" 
+                    class="jobs-bookmark-btn ${isSaved ? 'saved' : ''}" 
+                    style="width:42px; height:42px; border:1px solid #cbd5e1; border-radius:10px; background:#ffffff; display:flex; align-items:center; justify-content:center; font-size:1.1rem; cursor:pointer;"
+                    onclick="window.MedSphereJobs.toggleSaveJob('${data.id}'); MedSphereModals.open('modal-job-detail', window.MEDSPHERE_DATA.jobs.find(j => j.id === '${data.id}') || {});">
+              <i class="${isSaved ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'}"></i>
+            </button>
+          </div>
+
+          <!-- Scrollable Detail Body -->
+          <div style="padding:1.5rem; overflow-y:auto; flex:1; -webkit-overflow-scrolling:touch;">
+            <!-- Specs Grid -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:1.25rem;">
+              <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:0.85rem 1rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:#64748b; letter-spacing:0.05em; display:block; margin-bottom:4px;">SALARY</span>
+                <strong style="color:#0080ff; font-size:0.95rem; display:block;">${data.salary || 'Competitive'}</strong>
+                <span style="font-size:0.75rem; color:#64748b;">${data.type || 'Full-Time'}</span>
+              </div>
+              <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:0.85rem 1rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:#64748b; letter-spacing:0.05em; display:block; margin-bottom:4px;">OPENINGS</span>
+                <strong style="color:#0f172a; font-size:0.95rem; display:block;">${data.openings || '1 position'}</strong>
+                <span style="font-size:0.75rem; color:#64748b;">Posted ${data.posted || '2y ago'}</span>
+              </div>
+            </div>
+
+            <!-- Experience -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:0.85rem 1rem; margin-bottom:1.25rem;">
+              <span style="font-size:0.75rem; font-weight:700; color:#64748b; letter-spacing:0.05em; display:block; margin-bottom:4px;">EXPERIENCE</span>
+              <p style="font-size:0.875rem; color:#1e293b; margin:0; line-height:1.5;">${data.experience || data.description}</p>
+            </div>
+
+            <!-- Description -->
+            <div style="margin-bottom:1.25rem;">
+              <h4 style="font-size:0.85rem; font-weight:700; color:#0f172a; letter-spacing:0.05em; margin-bottom:0.5rem;">ABOUT THE ROLE</h4>
+              <p style="font-size:0.9rem; color:#334155; line-height:1.6; margin:0;">${data.description}</p>
+            </div>
+
+            <!-- Responsibilities -->
+            ${data.responsibilities && data.responsibilities.length ? `
+              <div style="margin-bottom:1.25rem;">
+                <h4 style="font-size:0.85rem; font-weight:700; color:#0f172a; letter-spacing:0.05em; margin-bottom:0.5rem;">KEY RESPONSIBILITIES</h4>
+                <ul style="padding-left:0; list-style:none; margin:0;">
+                  ${data.responsibilities.map(r => `
+                    <li style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; font-size:0.875rem; color:#334155; line-height:1.5;">
+                      <i class="fa-solid fa-circle-check" style="color:#059669; margin-top:3px; flex-shrink:0;"></i>
+                      <span>${r}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <!-- Requirements -->
+            ${data.requirements && data.requirements.length ? `
+              <div style="margin-bottom:1.25rem;">
+                <h4 style="font-size:0.85rem; font-weight:700; color:#0f172a; letter-spacing:0.05em; margin-bottom:0.5rem;">REQUIREMENTS &amp; QUALIFICATIONS</h4>
+                <ul style="padding-left:0; list-style:none; margin:0;">
+                  ${data.requirements.map(req => `
+                    <li style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; font-size:0.875rem; color:#334155; line-height:1.5;">
+                      <i class="fa-solid fa-award" style="color:#0080ff; margin-top:3px; flex-shrink:0;"></i>
+                      <span>${req}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <!-- Benefits -->
+            ${data.benefits && data.benefits.length ? `
+              <div style="margin-bottom:1.25rem;">
+                <h4 style="font-size:0.85rem; font-weight:700; color:#0f172a; letter-spacing:0.05em; margin-bottom:0.5rem;">COMPENSATION &amp; BENEFITS</h4>
+                <ul style="padding-left:0; list-style:none; margin:0;">
+                  ${data.benefits.map(b => `
+                    <li style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; font-size:0.875rem; color:#334155; line-height:1.5;">
+                      <i class="fa-solid fa-check" style="color:#059669; margin-top:3px; flex-shrink:0;"></i>
+                      <span>${b}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <!-- Bottom Apply CTA -->
+            <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #e2e8f0;">
+              <button type="button" 
+                      class="btn btn-primary w-100" 
+                      style="padding:0.75rem 1.5rem; font-weight:700; font-size:1rem; border-radius:9999px; background:#0080ff; color:#fff; border:none; box-shadow:0 4px 12px rgba(0,128,255,0.3);"
+                      onclick="MedSphereModals.open('modal-apply-job', window.MEDSPHERE_DATA.jobs.find(j => j.id === '${data.id}') || {})">
+                Apply on employer site
+              </button>
+            </div>
           </div>
         </div>
       `;
