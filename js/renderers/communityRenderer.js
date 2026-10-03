@@ -4,8 +4,6 @@ window.MedSphereCommunity = {
   // 1. Community Discussion Feed & Specialty Groups
   async renderCommunity(params = {}) {
     const store = window.MedSphereStore;
-    const allPosts = store.getState().communityPosts;
-    const tagFilter = params.tag || params.group || '';
 
     let groups = [];
     try {
@@ -14,33 +12,30 @@ window.MedSphereCommunity = {
       }
     } catch (e) {}
 
-    const posts = tagFilter ? allPosts.filter(p => (p.specialtyTag || '').toLowerCase().includes(tagFilter.toLowerCase())) : allPosts;
-
     return `
       <div class="page-hero-banner">
         <div class="container">
           <div class="breadcrumbs">
             <a href="#home">Home</a> <span>/</span> <span>Clinical Community</span>
           </div>
-          <h1 class="page-title">Healthcare Community & Clinical Case Rounds</h1>
+          <h1 class="page-title">Healthcare Community & Specialty Groups</h1>
           <p class="section-subtitle">
-            Peer-to-peer clinical problem solving, grand rounds discussion, and 10 verified medical specialty groups in a HIPAA-safe environment.
+            Verified medical specialty groups and clinical peer collaboration in a HIPAA-safe environment.
           </p>
         </div>
       </div>
 
-      <div class="container">
-        <!-- 10 Medical Specialty Groups Grid -->
-        <div style="margin-bottom:2.5rem; background:#fff; padding:1.5rem; border-radius:14px; border:1px solid var(--border-subtle); box-shadow:var(--shadow-sm);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+      <div class="container" style="padding-top:2.5rem; padding-bottom:5rem;">
+        <!-- Medical Specialty Groups Grid -->
+        <div style="background:#fff; padding:2rem; border-radius:16px; border:1px solid var(--border-subtle); box-shadow:var(--shadow-sm);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem;">
             <div>
-              <h3 style="font-size:1.15rem; color:var(--primary-900); margin:0;">Clinical Specialty Groups (10 Communities)</h3>
-              <p class="text-xs text-muted" style="margin:2px 0 0 0;">Join verified peer sub-specialties to exchange protocols, ECGs, and surgical techniques</p>
+              <h3 style="font-size:1.25rem; color:var(--primary-900); margin:0; font-weight:700;">Clinical Specialty Groups</h3>
+              <p class="text-xs text-muted" style="margin:4px 0 0 0;">Join verified peer sub-specialties to exchange protocols, techniques, and clinical insights</p>
             </div>
-            ${tagFilter ? `<a href="#community" class="btn btn-outline btn-xs"><i class="fa-solid fa-xmark" style="margin-right:4px;"></i> Clear Filter: ${tagFilter}</a>` : ''}
           </div>
 
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1rem;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1.25rem;">
             ${(groups.length ? groups : [
               { id: 'grp-cardio', name: 'Cardiology', slug: 'cardiology', icon: 'fa-heart-pulse', description: 'Coronary, structural heart, EP', members_count: 420 },
               { id: 'grp-icu', name: 'Critical Care / ICU', slug: 'icu', icon: 'fa-hospital', description: 'Hemodynamics, sepsis, ECMO', members_count: 310 },
@@ -48,151 +43,30 @@ window.MedSphereCommunity = {
               { id: 'grp-surgery', name: 'Surgery', slug: 'surgery', icon: 'fa-scalpel', description: 'Operative pearls & minimally invasive', members_count: 380 },
               { id: 'grp-students', name: 'Medical Students', slug: 'students', icon: 'fa-graduation-cap', description: 'USMLE, clinical rotations, matching', members_count: 540 }
             ]).map(g => {
-              const isActive = tagFilter && tagFilter.toLowerCase() === g.slug.toLowerCase();
+              const isMember = store.isGroupMember(g.id);
               return `
-                <div style="border:1px solid ${isActive ? 'var(--primary-700)' : 'var(--border-subtle)'}; background:${isActive ? 'var(--primary-50)' : 'var(--slate-50)'}; border-radius:10px; padding:0.85rem; display:flex; flex-direction:column; justify-content:space-between; gap:0.5rem;">
+                <div style="border:1px solid var(--border-subtle); background:#ffffff; border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; gap:1rem; box-shadow:0 1px 3px rgba(0,0,0,0.02); transition:all 0.2s ease;">
                   <div>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <i class="fa-solid ${g.icon || 'fa-user-doctor'}" style="color:var(--primary-700); font-size:1.1rem;"></i>
-                      <span class="text-xs text-muted"><i class="fa-solid fa-users" style="margin-right:3px;"></i>${g.members_count || 100}</span>
+                      <div style="width:40px; height:40px; border-radius:10px; background:var(--primary-50, #eff6ff); display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid ${g.icon || 'fa-user-doctor'}" style="color:var(--primary-700, #0080ff); font-size:1.15rem;"></i>
+                      </div>
+                      <span class="text-xs text-muted"><i class="fa-solid fa-users" style="margin-right:4px;"></i>${g.members_count || 100} members</span>
                     </div>
-                    <strong style="font-size:0.9rem; color:var(--primary-900); display:block; margin-top:4px;">
-                      <a href="#community?group=${g.slug}" style="color:inherit;">${g.name}</a>
+                    <strong style="font-size:1rem; color:var(--primary-900); display:block; margin-top:12px;">
+                      ${g.name}
                     </strong>
-                    <p class="text-xs text-muted" style="margin:2px 0 0 0; line-height:1.4;">${g.description || ''}</p>
+                    <p class="text-xs text-muted" style="margin:4px 0 0 0; line-height:1.5;">${g.description || ''}</p>
                   </div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-                    <a href="#community?group=${g.slug}" class="text-xs" style="color:var(--primary-700); font-weight:600;">Feed</a>
-                    <button class="btn ${g.is_member ? 'btn-secondary' : 'btn-outline'} btn-xs" onclick="window.MedSphereCommunity.handleToggleGroup('${g.id}')">
-                      ${g.is_member ? '&#10003; Joined' : '+ Join'}
+                  <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:8px;">
+                    <button class="btn ${isMember ? 'btn-secondary' : 'btn-primary'} btn-sm" onclick="window.MedSphereCommunity.handleToggleGroup('${g.id}')">
+                      ${isMember ? '&#10003; Joined' : '+ Join Group'}
                     </button>
                   </div>
                 </div>
               `;
             }).join('')}
           </div>
-        </div>
-
-        <div class="community-feed-grid">
-          <!-- Left Channel Nav -->
-          <aside>
-            <div class="filter-widget">
-              <h4 class="filter-widget-title">Filter by Channel</h4>
-              <div class="filter-checkbox-list">
-                <a href="#community" class="filter-pill ${!tagFilter ? 'active' : ''}" style="text-align:center;">All Discussions</a>
-                <a href="#community?tag=cardiology" class="filter-pill ${tagFilter === 'cardiology' ? 'active' : ''}" style="text-align:center;"><i class="fa-solid fa-heart-pulse" style="margin-right:6px; color:var(--red-500, #ef4444);"></i> Cardiology</a>
-                <a href="#community?tag=icu" class="filter-pill ${tagFilter === 'icu' ? 'active' : ''}" style="text-align:center;"><i class="fa-solid fa-hospital" style="margin-right:6px; color:var(--primary-600);"></i> Critical Care / ICU</a>
-                <a href="#community?tag=pediatrics" class="filter-pill ${tagFilter === 'pediatrics' ? 'active' : ''}" style="text-align:center;"><i class="fa-solid fa-baby" style="margin-right:6px; color:var(--amber-500, #f59e0b);"></i> Pediatrics</a>
-                <a href="#community?tag=surgery" class="filter-pill ${tagFilter === 'surgery' ? 'active' : ''}" style="text-align:center;"><i class="fa-solid fa-stethoscope" style="margin-right:6px; color:var(--emerald-600);"></i> Surgery</a>
-                <a href="#community?tag=pharmacy" class="filter-pill ${tagFilter === 'pharmacy' ? 'active' : ''}" style="text-align:center;"><i class="fa-solid fa-capsules" style="margin-right:6px; color:var(--primary-700);"></i> Pharmacy</a>
-                <a href="#community?tag=students" class="filter-pill ${tagFilter === 'students' ? 'active' : ''}" style="text-align:center;"><i class="fa-solid fa-graduation-cap" style="margin-right:6px; color:var(--primary-600);"></i> Medical Students</a>
-              </div>
-            </div>
-
-            <div class="filter-widget" style="margin-top:1.5rem;">
-              <h4 class="filter-widget-title">Clinical Guidelines</h4>
-              <p class="text-xs text-muted" style="line-height:1.6;">All discussions are moderated by verified board-certified physicians. Case presentations must be de-identified according to Safe Harbor HIPAA rules.</p>
-              <div style="margin-top:0.75rem;">
-                <span class="badge badge-green"><i class="fa-solid fa-shield-check" style="margin-right:4px;"></i> HIPAA De-identification Active</span>
-              </div>
-            </div>
-          </aside>
-
-          <!-- Middle Feed -->
-          <main>
-            <!-- Create Discussion Trigger Box -->
-            <div class="create-post-card">
-              <img src="${store.getState().currentUser?.avatar || 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80'}" alt="My Avatar" class="avatar" style="width:44px; height:44px; border-radius:50%; object-fit:cover;">
-              <button class="btn btn-outline w-100" style="text-align:left; justify-content:flex-start; color:var(--slate-500); background:var(--slate-50);" onclick="window.MedSphereModals.open('modal-create-post')">
-                Share a clinical scenario, ECG, or research inquiry with verified peers...
-              </button>
-            </div>
-
-            <!-- Feed Posts -->
-            <div class="community-posts-list">
-              ${posts.map(p => `
-                <div class="post-card">
-                  <div class="post-header">
-                    <div class="post-author-wrap">
-                      <img src="${p.authorAvatar || 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80'}" alt="${p.authorName}" style="width:44px; height:44px; border-radius:50%; object-fit:cover;">
-                      <div>
-                        <strong style="color:var(--primary-900); font-size:0.95rem;">${p.authorName}</strong>
-                        <div class="text-xs text-muted">${p.authorRole || 'Clinician'} · ${p.time || 'Recent'}</div>
-                      </div>
-                    </div>
-                    <span class="badge badge-blue">${p.specialtyTag}</span>
-                  </div>
-
-                  <p style="font-size:0.95rem; line-height:1.65; color:var(--slate-800); white-space:pre-line; margin-bottom:1.25rem;">
-                    ${p.content}
-                  </p>
-
-                  <div class="post-actions-bar">
-                    <button class="post-action-btn ${p.likedByMe ? 'active' : ''}" onclick="window.MedSphereStore.toggleLikePost('${p.id}'); window.MedSphereRouter.refreshCurrentPage();">
-                      <i class="${p.likedByMe ? 'fa-solid' : 'fa-regular'} fa-thumbs-up" style="font-size:1rem; margin-right:4px;"></i>
-                      <span>${p.likesCount} Helpful</span>
-                    </button>
-
-                    <button class="post-action-btn">
-                      <i class="fa-regular fa-comment-dots" style="font-size:1rem; margin-right:4px;"></i>
-                      <span>${p.commentsCount || (p.comments ? p.comments.length : 0)} Responses</span>
-                    </button>
-
-                    <button class="post-action-btn" onclick="window.MedSphereToast.show('Share', 'Post link copied to clipboard.', 'success')">
-                      <i class="fa-solid fa-share-nodes" style="font-size:1rem; margin-right:4px;"></i>
-                      <span>Share</span>
-                    </button>
-                  </div>
-
-                  <!-- Comments Subthread -->
-                  ${p.comments && p.comments.length ? `
-                    <div style="margin-top:1.25rem; padding-top:1rem; border-top:1px solid var(--border-subtle); display:flex; flex-direction:column; gap:0.85rem;">
-                      ${p.comments.map(c => `
-                        <div style="display:flex; gap:0.75rem; background:var(--slate-50); padding:0.75rem; border-radius:var(--radius-md);">
-                          <img src="${c.avatar || 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=200&q=80'}" alt="${c.name}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">
-                          <div style="flex:1;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                              <strong style="font-size:0.8125rem; color:var(--primary-900);">${c.name}</strong>
-                              <span class="text-xs text-muted">${c.time || ''}</span>
-                            </div>
-                            <div class="text-xs text-muted">${c.role || ''}</div>
-                            <p class="text-xs" style="margin-top:4px; color:var(--slate-700);">${c.text}</p>
-                          </div>
-                        </div>
-                      `).join('')}
-                    </div>
-                  ` : ''}
-
-                  <!-- Add Comment Form -->
-                  <div style="display:flex; gap:0.5rem; margin-top:1rem;">
-                    <input type="text" id="comment-input-${p.id}" class="form-control" style="padding:0.45rem 0.85rem; font-size:0.8125rem;" placeholder="Add clinical perspective..." onkeyup="if(event.key==='Enter') window.MedSphereCommunity.submitComment('${p.id}')">
-                    <button class="btn btn-secondary btn-sm" onclick="window.MedSphereCommunity.submitComment('${p.id}')">Reply</button>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </main>
-
-          <!-- Right Column -->
-          <aside>
-            <div class="filter-widget">
-              <h4 class="filter-widget-title">CME & Learning</h4>
-              <p class="text-xs text-muted">Earn accredited clinical education hours &amp; AMA PRA certificates.</p>
-              <a href="#education" class="btn btn-outline btn-sm w-100" style="margin-top:0.75rem;">
-                <i class="fa-solid fa-graduation-cap" style="margin-right:6px;"></i> Browse CME Courses
-              </a>
-            </div>
-
-            <div class="filter-widget" style="margin-top:1.5rem;">
-              <h4 class="filter-widget-title">Trending Clinical Topics</h4>
-              <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.875rem;">
-                <a href="#community?tag=cardiology">#OcclusionMI (OMI vs STEMI)</a>
-                <a href="#community?tag=icu">#PediatricECMO</a>
-                <a href="#community?tag=cardiology">#TAVRClinicalTrials</a>
-                <a href="#community?tag=surgery">#RoboticSurgicalOutcomes</a>
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
     `;
