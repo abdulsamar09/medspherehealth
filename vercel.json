@@ -1,10 +1,3 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/((?!assets|css|js|uploads|favicon|.*\\..*).*)",
-      "destination": "/index.html"
-    }
-  ]
+  "version": 2
 }
