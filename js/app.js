@@ -490,5 +490,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // 6. Initialize Router
   window.MedSphereRouter.init();
 
+  // 7. Prevent pinch-to-zoom and multi-touch zoom on mobile / iOS Safari
+  document.addEventListener('gesturestart', function (e) {
+    e.preventDefault();
+  });
+  document.addEventListener('gesturechange', function (e) {
+    e.preventDefault();
+  });
+  document.addEventListener('gestureend', function (e) {
+    e.preventDefault();
+  });
+  document.addEventListener('touchmove', function (e) {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
   console.log("MedSphere Platform Initialized with Modern Feed & Profile Popover.");
 });

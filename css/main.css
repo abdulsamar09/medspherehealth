@@ -85,6 +85,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -96,6 +98,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  touch-action: pan-x pan-y;
 }
 
 body.modal-open {
