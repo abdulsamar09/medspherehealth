@@ -2150,11 +2150,11 @@ window.MedSphereDashboard = {
         <!-- ================= CENTER COLUMN (MAIN STREAM) ================= -->
         <main class="feed-center-col">
           <!-- Stories Bar - LinkedIn circular style -->
-          <div class="feed-stories-bar" style="background:#fff; border-radius:12px; border:1px solid var(--border-subtle); padding:14px 16px; margin-bottom:1rem; display:flex; align-items:flex-start; gap:16px;">
+          <div class="feed-stories-bar" style="background:#fff; border-radius:12px; border:1px solid var(--border-subtle); padding:14px 16px; margin-bottom:1rem; display:flex; align-items:center; gap:16px;">
 
             <!-- Add story trigger - dashed border circle -->
             <div onclick="window.MedSphereModals.open('modal-story')" title="Post a story"
-              style="display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; min-width:68px;">
+              style="display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; min-width:68px; flex-shrink:0;">
               <div style="width:64px; height:64px; border-radius:50%; border:2.5px dashed #93c5fd; display:flex; align-items:center; justify-content:center; position:relative; background:#eff6ff; transition:border-color 0.2s, background 0.2s;"
                 onmouseover="this.style.borderColor='#2563eb'; this.style.background='#dbeafe';"
                 onmouseout="this.style.borderColor='#93c5fd'; this.style.background='#eff6ff';">
@@ -2166,10 +2166,10 @@ window.MedSphereDashboard = {
             </div>
 
             <!-- Stories: horizontal scroll -->
-            <div style="display:flex; gap:14px; overflow-x:auto; scrollbar-width:none; flex:1; padding-bottom:2px;">
+            <div style="display:flex; gap:14px; overflow-x:auto; scrollbar-width:none; flex:1; align-items:center; padding-bottom:2px;">
               ${allStories.map(story => `
                 <div onclick="window.MedSphereModals.open('modal-view-story', { storyId: '${story.id}' })" title="${story.authorName}'s story"
-                  style="display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; min-width:64px;">
+                  style="display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; min-width:64px; flex-shrink:0;">
                   <!-- Gradient ring avatar -->
                   <div style="width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, #0080ff 0%, #00d2ff 50%, #10b981 100%); padding:2.5px; box-shadow:0 2px 8px rgba(0,128,255,0.25); transition:transform 0.15s; flex-shrink:0;"
                     onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
@@ -2179,9 +2179,14 @@ window.MedSphereDashboard = {
                 </div>
               `).join('')}
               ${allStories.length === 0 ? `
-                <div style="display:flex; align-items:center; color:#94a3b8; font-size:0.82rem; font-weight:500; padding:4px 0;">
-                  <i class="fa-solid fa-photo-film" style="margin-right:8px; font-size:1rem; color:#c7d2fe;"></i>
-                  No stories yet. Be the first to share!
+                <div class="feed-stories-empty-prompt" onclick="window.MedSphereModals.open('modal-story')" title="Share your first clinical story">
+                  <div class="stories-empty-icon-wrap">
+                    <i class="fa-solid fa-camera"></i>
+                  </div>
+                  <div class="stories-empty-text-wrap">
+                    <span class="stories-empty-title">Share a Clinical Story</span>
+                    <span class="stories-empty-sub">Share cases, rounds, or daily hospital updates</span>
+                  </div>
                 </div>
               ` : ''}
             </div>
@@ -2214,9 +2219,12 @@ window.MedSphereDashboard = {
 
           <!-- Stream Sorter / Filter Bar -->
           <div class="feed-stream-header">
-            <span class="stream-filter-text">Showing posts from your network and specialties you follow</span>
+            <div class="stream-filter-text">
+              <span class="stream-filter-text-full">Showing posts from your network and specialties you follow</span>
+              <span class="stream-filter-text-mobile"><i class="fa-solid fa-bolt" style="color:var(--primary-600); margin-right:5px;"></i>Feed Updates</span>
+            </div>
             <div class="stream-sort-dropdown">
-              <span>Sort by:</span>
+              <span class="stream-sort-label">Sort:</span>
               <select id="feed-sort-select" onchange="window.MedSphereDashboard.handleSortFeed(this.value)">
                 <option value="relevant">Most relevant</option>
                 <option value="recent">Most recent</option>
@@ -2361,8 +2369,8 @@ window.MedSphereDashboard = {
             <div class="feed-post-author-meta">
               <span class="feed-post-author-name">${post.authorName}</span>
               <div class="feed-post-sub-meta">
-                <span>${post.authorRole || 'Doctor'}</span>
-                <span>&bull;</span>
+                <span class="feed-post-author-role">${post.authorRole || 'Doctor'}</span>
+                <span class="feed-post-meta-bullet">&bull;</span>
                 <span class="feed-post-tag">${post.time || 'RECENT'}</span>
               </div>
             </div>

@@ -178,17 +178,134 @@
   /* --- FEED (3-COLUMN → 1-COLUMN) --- */
   .feed-layout-container {
     grid-template-columns: 1fr !important;
-    padding: 0.6rem 0.6rem 4.5rem !important;
-    gap: 0.75rem !important;
+    padding: 0.5rem 0.5rem 4.5rem !important;
+    gap: 0.65rem !important;
   }
   .feed-left-col { display: none !important; }
   .feed-right-col { display: none !important; }
   .feed-center-col { min-width: 0; }
-  .feed-stories-bar { padding: 10px 12px !important; gap: 10px !important; }
+  
+  /* Stories bar on mobile */
+  .feed-stories-bar { 
+    padding: 10px 12px !important; 
+    gap: 10px !important; 
+    align-items: center !important; 
+    border-radius: 12px !important;
+  }
+  .feed-stories-empty-prompt {
+    padding: 8px 10px !important;
+    min-height: 52px !important;
+    gap: 8px !important;
+  }
+  .stories-empty-icon-wrap {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.85rem !important;
+  }
+  .stories-empty-title {
+    font-size: 0.78rem !important;
+  }
+  .stories-empty-sub {
+    font-size: 0.68rem !important;
+  }
+
+  /* Feed Stream Header on mobile */
+  .feed-stream-header {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 2px 4px !important;
+    margin-bottom: 0.55rem !important;
+    gap: 8px !important;
+  }
+  .stream-filter-text-full {
+    display: none !important;
+  }
+  .stream-filter-text-mobile {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    color: var(--slate-700) !important;
+  }
+  .stream-sort-dropdown {
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 0.76rem !important;
+    border: 1px solid var(--border-subtle);
+  }
+  .stream-sort-dropdown select {
+    font-size: 0.76rem !important;
+  }
+
+  /* Create Post Box on mobile */
   .feed-create-post-card { border-radius: 12px !important; padding: 0.85rem 1rem !important; }
   .create-post-actions-row { gap: 0.25rem !important; }
   .create-post-btn span { font-size: 0.8rem; }
-  .feed-post-card { border-radius: 12px !important; }
+
+  /* Feed Post Card on mobile */
+  .feed-post-card { 
+    border-radius: 12px !important; 
+    margin-bottom: 0.85rem !important;
+    padding: 0 !important;
+  }
+  .feed-post-header {
+    padding: 0.85rem 0.9rem 0.4rem !important;
+    gap: 6px !important;
+  }
+  .feed-post-author-wrap {
+    gap: 0.6rem !important;
+    min-width: 0;
+    flex: 1;
+  }
+  .feed-post-avatar {
+    width: 40px !important;
+    height: 40px !important;
+    flex-shrink: 0;
+  }
+  .feed-post-author-name {
+    font-size: 0.88rem !important;
+    line-height: 1.25;
+  }
+  .feed-post-sub-meta {
+    font-size: 0.72rem !important;
+    gap: 0.2rem 0.35rem !important;
+    flex-wrap: wrap !important;
+    margin-top: 2px !important;
+  }
+  .feed-post-author-role {
+    max-width: 140px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+  .feed-post-tag {
+    font-size: 0.62rem !important;
+    padding: 1px 5px !important;
+    white-space: nowrap !important;
+  }
+  .feed-post-options-btn {
+    padding: 4px 6px !important;
+    font-size: 1rem !important;
+    margin-left: 0.25rem !important;
+  }
+  .feed-post-content {
+    padding: 0.4rem 0.9rem 0.75rem !important;
+    font-size: 0.86rem !important;
+  }
+  .feed-post-reactions-summary {
+    padding: 0.45rem 0.9rem !important;
+    font-size: 0.72rem !important;
+  }
+  .feed-post-actions-bar {
+    padding: 0.25rem 0.4rem !important;
+  }
+  .feed-post-action-btn {
+    padding: 0.45rem 0.45rem !important;
+    font-size: 0.76rem !important;
+    gap: 0.3rem !important;
+  }
 
   /* --- DASHBOARD SIDEBAR — hidden on mobile --- */
   .dashboard-container { grid-template-columns: 1fr !important; }
@@ -407,7 +524,12 @@
   .partners-logo-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .hero-cta-row .btn { width: 100%; justify-content: center; }
   .feed-stories-bar { padding: 8px 10px !important; }
-  .feed-post-card { padding: 0.85rem !important; }
+  .feed-post-card { padding: 0 !important; }
+  .feed-post-header { padding: 0.75rem 0.8rem 0.35rem !important; }
+  .feed-post-content { padding: 0.35rem 0.8rem 0.65rem !important; }
+  .feed-post-reactions-summary { padding: 0.4rem 0.8rem !important; }
+  .feed-post-actions-bar { padding: 0.2rem 0.3rem !important; }
+  .feed-post-author-role { max-width: 110px !important; }
   .modal-dialog { max-height: 100vh !important; border-radius: 0 !important; }
   .auth-form-card { padding: 1.25rem 1rem; }
   .stats-grid, .counters-row { grid-template-columns: repeat(2, 1fr) !important; }
