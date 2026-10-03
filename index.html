@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedSphere — Healthcare Professional Network, Marketplace & Education Platform</title>
+  
+  <meta name="description" content="MedSphere is the world's leading unified healthcare ecosystem combining professional networking, healthcare directory, medical marketplace, CME education hub, and clinical jobs.">
+  <meta name="keywords" content="healthcare network, doctor directory, CME courses, medical marketplace, hospital jobs, clinical education, nursing certifications">
+  <meta name="theme-color" content="#0B5CAD">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MedSphere — Connecting the Future of Healthcare & Medicine">
+  <meta property="og:description" content="A powerful professional platform for healthcare professionals, students, hospitals, pharmacies, and medical organizations worldwide.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/hero_network.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/fav-icon.jpg">
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6.5.2 Pro/Free Icon Set -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Design System & Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       GLOBAL STICKY HEADER (Matches Reference Screenshot)
+       ========================================================================== -->
+  <header class="site-header" id="site-header">
+    <div class="header-container-feed">
+      <!-- Left: Brand Logo -->
+      <div class="header-left-group">
+        <a href="#home" class="brand-logo" id="header-brand-logo" aria-label="MedSphere Home">
+          <div class="logo-symbol">
+            <i class="fa-solid fa-staff-snake"></i>
+          </div>
+          <span class="brand-text">Med<span>Sphere</span></span>
+        </a>
+      </div>
+
+      <!-- Center: 7 Main Navigation Text Links -->
+      <nav class="feed-nav-menu" id="header-nav-menu" aria-label="Primary Navigation">
+        <a href="#home" class="nav-tab active" id="nav-home" title="MedSphere Home">Home</a>
+        <a href="#feed" class="nav-tab" id="nav-feed" title="Doctor Community Feed">Feed</a>
+        <a href="#network" class="nav-tab" id="nav-network" title="Professional Network">Network</a>
+        <a href="#marketplace" class="nav-tab" id="nav-marketplace" title="Healthcare Marketplace">Marketplace</a>
+        <a href="#education" class="nav-tab" id="nav-education" title="CME Courses & Modules">Education</a>
+        <a href="#jobs" class="nav-tab" id="nav-jobs" title="Healthcare Jobs">Jobs</a>
+        <a href="#hospitals" class="nav-tab" id="nav-hospitals" title="Hospitals & Systems">Hospitals</a>
+      </nav>
+
+      <!-- Right: Search, Notification Bell with '2' badge, & User Profile (Google) -->
+      <div class="header-right-actions">
+        <!-- Search Button -->
+        <button type="button" class="header-icon-btn" id="header-search-btn" title="Search Healthcare Directory" onclick="window.location.hash='#directory'">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <!-- Notification Bell & Dropdown Popover matching DocTak design -->
+        <div class="header-notif-container" id="header-notif-container">
+          <button type="button" class="header-icon-btn" id="header-notif-btn" title="Notifications" onclick="window.MedSphereApp.toggleNotifDropdown(event)" aria-haspopup="true" aria-expanded="false">
+            <i class="fa-regular fa-bell"></i>
+            <span class="header-badge-count" id="header-notif-badge">2</span>
+          </button>
+
+          <!-- Notifications Popover Card -->
+          <div class="notif-dropdown-popover" id="header-notif-popover">
+            <div class="notif-popover-header">
+              <h3 class="notif-popover-title">Notifications</h3>
+            </div>
+
+            <!-- Tabs: All | Unread | Jobs | Other -->
+            <div class="notif-tabs-bar">
+              <button type="button" class="notif-tab-btn active" data-notif-tab="all" onclick="window.MedSphereApp.switchNotifTab('all')">All</button>
+              <button type="button" class="notif-tab-btn" data-notif-tab="unread" onclick="window.MedSphereApp.switchNotifTab('unread')">Unread</button>
+              <button type="button" class="notif-tab-btn" data-notif-tab="jobs" onclick="window.MedSphereApp.switchNotifTab('jobs')">Jobs</button>
+              <button type="button" class="notif-tab-btn" data-notif-tab="other" onclick="window.MedSphereApp.switchNotifTab('other')">Other</button>
+            </div>
+
+            <!-- Dynamic Notification Body -->
+            <div class="notif-popover-body" id="notif-popover-body">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Footer: See all notifications -->
+            <div class="notif-popover-footer">
+              <a href="#notifications" class="notif-see-all-link" onclick="window.MedSphereApp.closeNotifDropdown()">See all notifications</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Profile Trigger (Doctor Avatar + Google + Chevron) -->
+        <div class="user-profile-dropdown-container" id="user-profile-dropdown-container">
+          <button type="button" class="user-profile-pill-btn" id="header-user-profile-btn" onclick="window.MedSphereApp.toggleProfileDropdown(event)" aria-haspopup="true" aria-expanded="false">
+            <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="user-pill-avatar" id="header-user-avatar">
+            <span class="user-pill-name" id="header-user-name">Google</span>
+            <i class="fa-solid fa-chevron-down user-pill-chevron"></i>
+          </button>
+
+          <!-- Floating Dropdown Menu -->
+          <div class="feed-profile-popover" id="feed-profile-popover">
+            <!-- User Header -->
+            <div class="popover-user-card">
+              <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=400&q=80" alt="" class="popover-user-avatar" id="popover-avatar">
+              <div class="popover-user-info">
+                <div class="popover-user-name" id="popover-name">Dr Eleanor Vance</div>
+                <div class="popover-user-spec" id="popover-spec">Anatomical Pathology</div>
+              </div>
+              <a href="#profile" class="popover-profile-btn" onclick="window.MedSphereApp.closeProfileDropdown()">Profile</a>
+            </div>
+
+            <!-- Menu Action Links -->
+            <div class="popover-menu-links">
+              <a href="#verification" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()" style="color:var(--primary-800); font-weight:600;">
+                <i class="fa-solid fa-shield-halved" style="color:var(--emerald-600);"></i>
+                <span>Credential Verification</span>
+              </a>
+              <a href="#employer" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-solid fa-hospital-user"></i>
+                <span>Employer & Hiring Hub</span>
+              </a>
+              <a href="#supplier" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Supplier / B2B Portal</span>
+              </a>
+              <a href="#student" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>Student & Academic Hub</span>
+              </a>
+              <a href="#admin" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-solid fa-shield-check"></i>
+                <span>Admin Governance</span>
+              </a>
+              <div class="popover-separator"></div>
+              <a href="javascript:void(0)" class="popover-menu-link" onclick="window.MedSphereApp.openProfileStats()">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Profile statistics</span>
+              </a>
+              <a href="#insights" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Ad Campaigns</span>
+              </a>
+              <a href="javascript:void(0)" class="popover-menu-link" onclick="window.MedSphereApp.openActivityLog()">
+                <i class="fa-solid fa-bolt-lightning"></i>
+                <span>Activity log</span>
+              </a>
+              <a href="#settings" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-solid fa-gear"></i>
+                <span>Account settings</span>
+              </a>
+              <a href="#contact" class="popover-menu-link" onclick="window.MedSphereApp.closeProfileDropdown()">
+                <i class="fa-regular fa-circle-question"></i>
+                <span>Support center</span>
+              </a>
+              <div class="popover-menu-link popover-darkmode-link">
+                <div class="darkmode-label-group">
+                  <i class="fa-regular fa-moon"></i>
+                  <span>Dark mode</span>
+                </div>
+                <label class="theme-toggle-switch">
+                  <input type="checkbox" id="header-dark-mode-toggle" onchange="window.MedSphereApp.toggleDarkMode(this.checked)">
+                  <span class="theme-toggle-slider"></span>
+                </label>
+              </div>
+              <div class="popover-separator"></div>
+              <a href="javascript:void(0)" class="popover-menu-link popover-logout-link" onclick="window.MedSphereApp.handleLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Log out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logged Out Auth Buttons -->
+        <a href="#login" class="btn btn-ghost" id="header-signin-btn">Sign In</a>
+        <a href="#register" class="btn btn-primary" id="header-join-cta">Join the Network</a>
+
+        <!-- Mobile Drawer Toggle -->
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open mobile menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MOBILE DRAWER NAVIGATION
+       ========================================================================== -->
+  <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop">
+    <div class="mobile-drawer">
+      <div class="mobile-drawer-header">
+        <div class="brand-logo">
+          <div class="logo-symbol">
+            <i class="fa-solid fa-staff-snake"></i>
+          </div>
+          <span>Med<span>Sphere</span></span>
+        </div>
+        <button class="modal-close-btn" id="mobile-drawer-close" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="mobile-nav-links">
+        <a href="#home" class="mobile-nav-link"><i class="fa-solid fa-house" style="width:24px;"></i> Home</a>
+        <a href="#network" class="mobile-nav-link"><i class="fa-solid fa-user-doctor" style="width:24px;"></i> Network Directory</a>
+        <a href="#marketplace" class="mobile-nav-link"><i class="fa-solid fa-cart-shopping" style="width:24px;"></i> Healthcare Marketplace</a>
+        <a href="#education" class="mobile-nav-link"><i class="fa-solid fa-graduation-cap" style="width:24px;"></i> Education & CME Hub</a>
+        <a href="#jobs" class="mobile-nav-link"><i class="fa-solid fa-briefcase" style="width:24px;"></i> Healthcare Jobs</a>
+        <a href="#hospitals" class="mobile-nav-link"><i class="fa-solid fa-hospital" style="width:24px;"></i> Hospitals & Systems</a>
+        <a href="#companies" class="mobile-nav-link"><i class="fa-solid fa-pills" style="width:24px;"></i> Pharma & MedTech</a>
+        <a href="#community" class="mobile-nav-link"><i class="fa-solid fa-users" style="width:24px;"></i> Community Rounds</a>
+        <a href="#messages" class="mobile-nav-link"><i class="fa-solid fa-comment-medical" style="width:24px;"></i> Encrypted Messages</a>
+        <a href="#insights" class="mobile-nav-link"><i class="fa-solid fa-book-medical" style="width:24px;"></i> Knowledge Center</a>
+        <a href="#dashboard" class="mobile-nav-link" style="color:var(--primary-800); font-weight:700;"><i class="fa-solid fa-gauge-high" style="width:24px;"></i> User Dashboard</a>
+        <a href="#admin" class="mobile-nav-link" style="color:var(--primary-700); font-weight:700;"><i class="fa-solid fa-shield-halved" style="width:24px;"></i> Admin Panel</a>
+      </div>
+
+      <div class="mobile-drawer-footer">
+        <a href="#login" class="btn btn-outline w-100">Sign In</a>
+        <a href="#register" class="btn btn-primary w-100">Join the Network</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MOBILE BOTTOM NAVIGATION BAR (shown only on mobile)
+       ========================================================================== -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="#feed" class="mob-nav-btn" id="mob-nav-home" title="Home">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="#jobs" class="mob-nav-btn" id="mob-nav-jobs" title="Jobs">
+      <i class="fa-solid fa-briefcase"></i>
+      <span>Jobs</span>
+    </a>
+    <a href="#network" class="mob-nav-btn" id="mob-nav-network" title="Network">
+      <i class="fa-solid fa-user-group"></i>
+      <span>Network</span>
+    </a>
+    <a href="#explore" class="mob-nav-btn" id="mob-nav-explore" title="Explore">
+      <i class="fa-solid fa-compass"></i>
+      <span>Explore</span>
+    </a>
+    <a href="#community" class="mob-nav-btn" id="mob-nav-community" title="Community">
+      <i class="fa-solid fa-comments"></i>
+      <span>Community</span>
+    </a>
+  </nav>
+
+  <!-- ==========================================================================
+       MAIN DYNAMIC SPA VIEW CONTAINER
+       ========================================================================= -->
+  <main id="main-content" role="main">
+    <!-- Populated dynamically by window.MedSphereRouter -->
+  </main>
+
+  <!-- ==========================================================================
+       PRE-FOOTER CALL TO ACTION (Matches User Reference Image & Color Theme)
+       ========================================================================== -->
+  <section class="pre-footer-cta-section" id="pre-footer-cta">
+    <div class="container pre-footer-cta-container">
+      <div class="pre-footer-content">
+        <!-- Main Title -->
+        <h2 class="pre-footer-title">Ready to Start?</h2>
+        
+        <!-- Subtitle -->
+        <p class="pre-footer-subtitle">
+          One account for public discovery, verified networking, and the full clinical workspace.
+        </p>
+
+        <!-- CTA Buttons Row -->
+        <div class="pre-footer-actions">
+          <a href="#register" class="btn-prefooter-primary">
+            <span>Create Your Account</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </a>
+          <a href="#login" class="btn-prefooter-secondary">
+            <span>Log In</span>
+          </a>
+        </div>
+
+        <!-- Trust / Features Chips Row -->
+        <div class="pre-footer-chips-row">
+          <div class="pre-footer-chip">
+            <i class="fa-solid fa-earth-americas"></i>
+            <span>Public medical network</span>
+          </div>
+          <div class="pre-footer-chip">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Signed-in workspace</span>
+          </div>
+          <div class="pre-footer-chip">
+            <i class="fa-solid fa-file-medical"></i>
+            <span>Articles & collaboration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       GLOBAL FOOTER
+       ========================================================================== -->
+  <footer class="site-footer" id="site-footer">
+    <div class="footer-ambient-accent-dot"></div>
+    <div class="container">
+      <div class="footer-split-layout">
+        <!-- LEFT ZONE: Brand, Description, Contact Pills, Horizontal Nav Links -->
+        <div class="footer-left-zone">
+          <a href="#home" class="brand-logo footer-brand-logo" aria-label="MedSphere Home">
+            <div class="logo-symbol">
+              <i class="fa-solid fa-staff-snake"></i>
+            </div>
+            <span class="brand-text">Med<span>Sphere</span></span>
+          </a>
+
+          <p class="footer-brand-desc">
+            The world's healthcare marketplace and medical education network. Connecting verified clinicians, students, hospitals, and pharmaceutical innovators globally.
+          </p>
+
+          <!-- Contact Pills Row (Matching Ref Image) -->
+          <div class="footer-contact-pills">
+            <a href="tel:+14155550123" class="footer-pill-btn" title="Call MedSphere Support">
+              <i class="fa-solid fa-phone"></i>
+              <span>+1 (415) 555-0123</span>
+            </a>
+            <a href="mailto:partners@medsphere.health" class="footer-pill-btn" title="Email Institutional Partnerships">
+              <i class="fa-solid fa-envelope"></i>
+              <span>partners@medsphere.health</span>
+            </a>
+          </div>
+
+          <!-- Horizontal Nav Links Row (Matching Ref Image) -->
+          <nav class="footer-horizontal-nav" aria-label="Footer Quick Navigation">
+            <a href="#home" class="footer-hnav-link">Home</a>
+            <a href="#network" class="footer-hnav-link">Network</a>
+            <a href="#marketplace" class="footer-hnav-link">Marketplace</a>
+            <a href="#education" class="footer-hnav-link">Education</a>
+            <a href="#demo" class="footer-hnav-link">Contact</a>
+          </nav>
+        </div>
+
+        <!-- VERTICAL DIVIDER -->
+        <div class="footer-zone-divider"></div>
+
+        <!-- RIGHT ZONE: Our Services, Working Hours, Follow Us Socials -->
+        <div class="footer-right-zone">
+          <div class="footer-services-hours-grid">
+            <!-- Column 1: Our Services -->
+            <div class="footer-col-group">
+              <h4 class="footer-zone-title">Our Services</h4>
+              <div class="footer-links-list">
+                <a href="#directory?role=doctor" class="footer-link">Doctors & Specialists</a>
+                <a href="#education" class="footer-link">Medical Courses & CME</a>
+                <a href="#marketplace" class="footer-link">Hospital Procurement</a>
+                <a href="#resources" class="footer-link">Clinical Guidelines</a>
+                <a href="#companies" class="footer-link">Pharmaceutical Directory</a>
+              </div>
+            </div>
+
+            <!-- Column 2: Working Hours -->
+            <div class="footer-col-group">
+              <h4 class="footer-zone-title">Working Hours</h4>
+              <div class="footer-hours-list">
+                <div class="footer-hour-item">
+                  <span class="hour-label">Mon – Fri:</span>
+                  <span class="hour-time">08:00AM – 08:00PM EST</span>
+                </div>
+                <div class="footer-hour-item">
+                  <span class="hour-label">Saturday:</span>
+                  <span class="hour-time">09:00AM – 05:00PM EST</span>
+                </div>
+                <div class="footer-hour-item">
+                  <span class="hour-label">Clinical On-Call:</span>
+                  <span class="hour-time hour-highlight">24/7 Active Network</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Follow Us Row (Matching Ref Image) -->
+          <div class="footer-follow-row">
+            <span class="footer-follow-label">Follow Us:</span>
+            <div class="footer-social-circles">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="LinkedIn" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="X (Twitter)" aria-label="Twitter">
+                <i class="fa-brands fa-x-twitter"></i>
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="Facebook" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="Instagram" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar: Copyright on Left, Dot Links & Verification Badges on Right -->
+      <div class="footer-bottom-bar">
+        <div class="footer-copyright-text">
+          Copyright © 2026 MedSphere Health, Inc. All Rights Reserved.
+        </div>
+
+        <div class="footer-bottom-right">
+          <div class="footer-dot-links">
+            <a href="#help" onclick="window.MedSphereToast.show('MedSphere Help Desk', 'Support articles, clinical FAQs and onboarding guides available.', 'info')">Help</a>
+            <span class="dot-separator">•</span>
+            <a href="#support" onclick="window.MedSphereToast.show('Clinician Support', 'Dedicated 24/7 institutional provider help desk active.', 'info')">Support</a>
+            <span class="dot-separator">•</span>
+            <a href="mailto:partners@medsphere.health">Contact Us</a>
+            <span class="dot-separator">•</span>
+            <a href="#security" onclick="window.MedSphereToast.show('Security & HIPAA', 'Enterprise 256-bit AES encryption & SOC2 Type II compliance.', 'info')">Security & HIPAA</a>
+          </div>
+
+          <div class="footer-trust-chips">
+            <span class="footer-cert-chip">HIPAA Verified</span>
+            <span class="footer-cert-chip">SOC2 Type II</span>
+            <span class="footer-cert-chip">ACCME Accredited</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="medsphere-toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/renderers/homeRenderer.js"></script>
+  <script src="js/renderers/directoryRenderer.js"></script>
+  <script src="js/renderers/marketplaceRenderer.js"></script>
+  <script src="js/renderers/educationRenderer.js"></script>
+  <script src="js/renderers/jobsRenderer.js"></script>
+  <script src="js/renderers/communityRenderer.js"></script>
+  <script src="js/renderers/dashboardRenderer.js"></script>
+  <script src="js/renderers/messagesRenderer.js"></script>
+  <script src="js/renderers/adminRenderer.js"></script>
+  <script src="js/renderers/authRenderer.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
