@@ -434,7 +434,7 @@ window.MedSphereModals = {
       const locationLine = data.facility ? `${data.facility} · ${data.location}` : (data.location || '');
 
       modalHtml = `
-        <div class="modal-dialog modal-dialog-lg" style="max-width:680px; width:100%; max-height:90vh; display:flex; flex-direction:column; padding:0; overflow:hidden; border-radius:18px;">
+        <div class="modal-dialog modal-dialog-lg modal-job-detail-dialog" style="display:flex; flex-direction:column; padding:0; overflow:hidden;">
           <!-- Header -->
           <div style="padding:1.25rem 1.5rem; border-bottom:1px solid #e2e8f0; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; background:#ffffff;">
             <div style="display:flex; align-items:flex-start; gap:12px;">

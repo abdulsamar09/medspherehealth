@@ -156,17 +156,24 @@
   /* Ensure content is not hidden under bottom bar */
   #main-content { padding-bottom: 64px; }
 
-  /* --- MODAL — bottom sheet style --- */
-  .modal-overlay { align-items: flex-end; padding: 0; }
-  .modal-dialog {
+  /* --- MODAL — bottom sheet style (100% full width edge-to-edge on mobile) --- */
+  .modal-overlay,
+  .medsphere-modal-backdrop {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal-dialog,
+  .modal-dialog-lg,
+  .modal-job-detail-dialog {
     max-width: 100% !important;
     width: 100% !important;
-    border-radius: 18px 18px 0 0 !important;
+    min-width: 100% !important;
+    border-radius: 22px 22px 0 0 !important;
     margin: 0 !important;
-    max-height: 92vh;
+    max-height: 94vh !important;
+    max-height: 94dvh !important;
     overflow-y: auto;
   }
-  .modal-dialog-lg { max-width: 100% !important; }
 
   /* --- FEED (3-COLUMN → 1-COLUMN) --- */
   .feed-layout-container {

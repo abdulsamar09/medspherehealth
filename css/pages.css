@@ -4024,6 +4024,33 @@
   }
 }
 
+/* Job Detail Modal Dialog */
+.modal-job-detail-dialog {
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  border-radius: 18px;
+}
+
+@media (max-width: 768px) {
+  #modal-job-detail.medsphere-modal-backdrop,
+  #modal-apply-job.medsphere-modal-backdrop {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  #modal-job-detail .modal-dialog,
+  #modal-apply-job .modal-dialog,
+  .modal-job-detail-dialog {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    border-radius: 22px 22px 0 0 !important;
+    margin: 0 !important;
+    max-height: 94vh !important;
+    max-height: 94dvh !important;
+  }
+}
+
 /* ==========================================================================
    DOCTAK-STYLE ACCOUNT SETTINGS (MEDSPHERE THEME)
    ========================================================================== */
