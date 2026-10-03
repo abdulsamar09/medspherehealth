@@ -2,9 +2,10 @@
   "name": "health-care-website",
   "version": "1.0.0",
   "description": "![MedSphere Platform](assets/hero_network.jpg)",
-  "main": "index.js",
   "scripts": {
+    "build": "echo 'Build complete'",
     "start": "node server.js",
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
