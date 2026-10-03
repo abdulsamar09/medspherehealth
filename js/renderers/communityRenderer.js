@@ -43,7 +43,9 @@ window.MedSphereCommunity = {
               { id: 'grp-surgery', name: 'Surgery', slug: 'surgery', icon: 'fa-scalpel', description: 'Operative pearls & minimally invasive', members_count: 380 },
               { id: 'grp-students', name: 'Medical Students', slug: 'students', icon: 'fa-graduation-cap', description: 'USMLE, clinical rotations, matching', members_count: 540 }
             ]).map(g => {
-              const isMember = store.isGroupMember(g.id);
+              const isMember = (store && typeof store.isGroupMember === 'function') 
+                ? store.isGroupMember(g.id) 
+                : (store && typeof store.isGroupJoined === 'function' ? store.isGroupJoined(g.id) : false);
               return `
                 <div style="border:1px solid var(--border-subtle); background:#ffffff; border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; gap:1rem; box-shadow:0 1px 3px rgba(0,0,0,0.02); transition:all 0.2s ease;">
                   <div>
@@ -74,11 +76,14 @@ window.MedSphereCommunity = {
 
   async handleToggleGroup(groupId) {
     try {
+      const isJoined = window.MedSphereStore ? (window.MedSphereStore.toggleGroup ? window.MedSphereStore.toggleGroup(groupId) : window.MedSphereStore.toggleJoinGroup(groupId)) : true;
       if (window.MedSphereAPI) {
-        const res = await window.MedSphereAPI.toggleGroup(groupId);
-        window.MedSphereToast.show(res.joined ? 'Joined Group' : 'Left Group', res.joined ? 'You are now a member of this specialty community.' : 'You have left this specialty community.', 'success');
-        window.MedSphereRouter.refreshCurrentPage();
+        try {
+          await window.MedSphereAPI.toggleGroup(groupId);
+        } catch (e) {}
       }
+      window.MedSphereToast.show(isJoined ? 'Joined Group' : 'Left Group', isJoined ? 'You are now a member of this specialty community.' : 'You have left this specialty community.', 'success');
+      window.MedSphereRouter.refreshCurrentPage();
     } catch (e) {
       window.MedSphereToast.show('Error', e.message || 'Could not update group membership', 'error');
     }

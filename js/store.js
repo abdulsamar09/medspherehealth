@@ -501,6 +501,14 @@
       return Boolean(state.joinedGroups && state.joinedGroups.includes(groupId));
     },
 
+    isGroupMember(groupId) {
+      return this.isGroupJoined(groupId);
+    },
+
+    toggleGroup(groupId) {
+      return this.toggleJoinGroup(groupId);
+    },
+
     // Clinical Colleague Stories
     addStory(storyData) {
       if (!state.stories) state.stories = [];
